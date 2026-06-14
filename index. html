@@ -446,7 +446,7 @@
             }
         }
 
-        // Dark / Light framework switcher adjusted for Tailwind v4 behavior
+        // Darrk / Light framework switcher adjusted for Tailwind v4 behavior
         function toggleTheme() {
             const html = document.documentElement;
             const body = document.body;
