@@ -340,7 +340,7 @@
             localStorage.setItem('pf_history', JSON.stringify(historyLog));
         }
 
-        // Copy Feature
+        // Copoy Feature
         function copyOutput() {
             const activeText = currentOutputState[activeTab];
             if(!activeText) {
