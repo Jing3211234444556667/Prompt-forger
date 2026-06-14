@@ -232,7 +232,7 @@
         let savedVault = JSON.parse(localStorage.getItem('pf_vault')) || [];
         let activeTab = "standard";
 
-        // DOM Inputs Tracking Setup
+        // DOM Inputs Tracking Setup.
         const rawInput = document.getElementById('raw-input');
         const charCounter = document.getElementById('char-counter');
         
