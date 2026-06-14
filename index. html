@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptForge AI - Universal Prompt Engineering Studio</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        /* Smooth transitions for theme switching */
+        * { transition: background-color 0.3s ease, border-color 0.3s ease; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="bg-gradient-to-tr from-cyan-500 to-fuchsia-600 p-2 rounded-xl shadow-lg shadow-cyan-500/20">
+                <i class="fa-solid fa-wand-magic-sparkles text-xl text-white"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">PromptForge <span class="text-cyan-400 font-extrabold text-sm tracking-widest uppercase ml-1">AI</span></h1>
+                <p class="text-xs text-slate-400">Universal Prompt Engine v1.0</p>
+            </div>
+        </div>
+
+        <nav class="hidden md:flex items-center space-x-1 bg-slate-950/60 p-1.5 rounded-xl border border-slate-800">
+            <button onclick="switchView('workspace')" id="nav-workspace" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium bg-cyan-500 text-white transition-all cursor-pointer">
+                <i class="fa-solid fa-cubes mr-2"></i>Workspace
+            </button>
+            <button onclick="switchView('saved')" id="nav-saved" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-slate-200 transition-all cursor-pointer">
+                <i class="fa-solid fa-bookmark mr-2"></i>Saved Forges
+            </button>
+            <button onclick="switchView('history')" id="nav-history" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-slate-200 transition-all cursor-pointer">
+                <i class="fa-solid fa-clock-rotate-left mr-2"></i>History
+            </button>
+        </nav>
+
+        <div class="flex items-center space-x-3">
+            <button onclick="toggleTheme()" class="p-2 rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-cyan-400 cursor-pointer">
+                <i id="theme-icon" class="fa-solid fa-moon"></i>
+            </button>
+            <div class="h-6 w-px bg-slate-800"></div>
+            <div class="flex items-center space-x-2 text-xs text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg">
+                <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Engine Active</span>
+            </div>
+        </div>
+    </header>
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <section id="view-workspace" class="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
+            
+            <div class="lg:col-span-5 flex flex-col space-y-5">
+                
+                <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-sm space-y-4">
+                    <h3 class="text-sm font-semibold tracking-wide uppercase text-slate-400 flex items-center">
+                        <i class="fa-solid fa-sliders text-cyan-400 mr-2"></i>Forge Configurations
+                    </h3>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-2">Target AI Model</label>
+                        <select id="target-model" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+                            <optgroup class="bg-slate-950 text-slate-200" label="Text & Reasoning Models">
+                                <option value="chatgpt">ChatGPT (GPT-4o/o1)</option>
+                                <option value="gemini">Google Gemini 1.5/2.0</option>
+                                <option value="claude">Anthropic Claude 3.5 Sonnet</option>
+                                <option value="grok">xAI Grok 2</option>
+                            </optgroup>
+                            <optgroup class="bg-slate-950 text-slate-200" label="Image Generation Engines">
+                                <option value="midjourney">Midjourney v6</option>
+                                <option value="stablediffusion">Stable Diffusion (SDXL/3)</option>
+                                <option value="flux">FLUX.1 (Schnell/Dev)</option>
+                                <option value="ideogram">Ideogram 2.0</option>
+                                <option value="dalle">OpenAI DALL·E 3</option>
+                                <option value="leonardo">Leonardo AI</option>
+                            </optgroup>
+                            <optgroup class="bg-slate-950 text-slate-200" label="Video Generation Engines">
+                                <option value="hunyuan">Hunyuan Video</option>
+                                <option value="veo">Google Veo</option>
+                                <option value="kling">Kling AI</option>
+                                <option value="runway">Runway Gen-3 Alpha</option>
+                                <option value="sora">OpenAI Sora</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-2">Task Category</label>
+                            <select id="task-category" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500">
+                                <option value="img_gen">🖼️ Image Gen</option>
+                                <option value="vid_gen">🎬 Video Gen</option>
+                                <option value="code_dev">💻 Code & Dev</option>
+                                <option value="marketing">📈 Marketing</option>
+                                <option value="creative_write">✍️ Creative Writing</option>
+                                <option value="ui_ux">🎨 UI/UX Design</option>
+                                <option value="data_analysis">📊 Data Analysis</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-2">Prompt Mode</label>
+                            <select id="prompt-mode" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500">
+                                <option value="beginner">Beginner</option>
+                                <option value="professional" selected>Professional</option>
+                                <option value="expert">Expert</option>
+                                <option value="master">Master</option>
+                                <option value="photorealistic">Photorealistic</option>
+                                <option value="cinematic">Cinematic</option>
+                                <option value="technical">Technical</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-sm flex-1 flex flex-col justify-between space-y-4">
+                    <div class="flex-1 flex flex-col">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-xs font-medium text-slate-400">Your Base Idea or Raw Prompt</label>
+                            <span id="char-counter" class="text-[10px] mono text-slate-500">0 chars</span>
+                        </div>
+                        <textarea id="raw-input" placeholder="Type your simple idea here (e.g., 'a cat astronaut in space' or 'python script to parse csv files'). Let the engine upscale it..." 
+                            class="w-full flex-1 min-h-[180px] bg-slate-950/80 border border-slate-800 rounded-xl p-4 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 resize-none"></textarea>
+                    </div>
+
+                    <div id="advanced-param-box" class="p-3 bg-slate-950/60 rounded-xl border border-slate-800/60 space-y-2">
+                        <span class="text-[11px] font-semibold tracking-wider text-cyan-400/80 uppercase block"><i class="fa-solid fa-wand-magic mr-1"></i> Engine Meta-Parameters</span>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <label class="flex items-center space-x-2 text-slate-400 cursor-pointer"><input type="checkbox" id="param-negative" class="rounded border-slate-800 text-cyan-500 bg-slate-900" checked> <span>Inject Negatives</span></label>
+                            <label class="flex items-center space-x-2 text-slate-400 cursor-pointer"><input type="checkbox" id="param-aspect" class="rounded border-slate-800 text-cyan-500 bg-slate-900" checked> <span>Auto Aspect Ratios</span></label>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 pt-2">
+                        <button onclick="processPrompt('optimize')" class="bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl py-3 text-sm font-medium hover:from-cyan-500 hover:to-blue-500 cursor-pointer transition shadow-lg shadow-cyan-900/20 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-bolt animate-pulse"></i> <span>Optimize Prompt</span>
+                        </button>
+                        <button onclick="processPrompt('convert')" class="bg-slate-800 border border-slate-700 text-slate-200 rounded-xl py-3 text-sm font-medium hover:bg-slate-700 transition cursor-pointer flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-shuffle"></i> <span>Smart Convert</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 flex flex-col space-y-5">
+                
+                <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-sm flex-1 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-semibold tracking-wide uppercase text-slate-400 flex items-center">
+                            <i class="fa-solid fa-terminal text-fuchsia-500 mr-2"></i> Forged Output Engine
+                        </h3>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="copyOutput()" class="text-xs bg-slate-950 hover:bg-slate-800 border border-slate-800 px-3 py-1.5 rounded-lg text-slate-300 transition flex items-center space-x-1.5 cursor-pointer">
+                                <i class="fa-regular fa-copy"></i> <span>Copy</span>
+                            </button>
+                            <button onclick="saveCurrentPrompt()" class="text-xs bg-slate-950 hover:bg-slate-800 border border-slate-800 px-3 py-1.5 rounded-lg text-slate-300 transition flex items-center space-x-1.5 cursor-pointer">
+                                <i class="fa-regular fa-bookmark"></i> <span>Save</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-2 mb-3 bg-slate-950 p-1 rounded-xl border border-slate-800/60 max-w-xs">
+                        <button id="tab-standard" onclick="switchOutputTab('standard')" class="flex-1 text-xs py-1.5 px-3 rounded-lg font-medium text-white bg-slate-800 transition cursor-pointer">Standard Target</button>
+                        <button id="tab-advanced" onclick="switchOutputTab('advanced')" class="flex-1 text-xs py-1.5 px-3 rounded-lg font-medium text-slate-400 transition cursor-pointer">Ultra Advanced</button>
+                    </div>
+
+                    <div class="flex-1 bg-slate-950 border border-slate-900 rounded-xl p-4 relative min-h-[220px]">
+                        <p id="output-placeholder" class="text-sm text-slate-600 italic">No instructions or prompts forged yet. Configure options on the left and strike the forge button.</p>
+                        <div id="output-text-container" class="hidden h-full flex-col justify-between">
+                            <div id="output-rendered-text" class="text-sm text-slate-100 mono leading-relaxed whitespace-pre-line select-all"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="analysis-dashboard" class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-sm hidden">
+                    <h4 class="text-xs font-bold tracking-wider text-fuchsia-400 uppercase mb-3"><i class="fa-solid fa-chart-simple mr-1"></i> Engineering & Optimization Breakdown</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/40">
+                            <span class="text-slate-400 block font-medium mb-1">Engine Structural Modifications</span>
+                            <p id="analysis-modifications" class="text-slate-300 leading-normal"></p>
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/40">
+                            <span class="text-slate-400 block font-medium mb-1">Negative Vector Injection</span>
+                            <p id="analysis-negatives" class="text-slate-400 italic mono text-[11px]"></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="view-saved" class="col-span-12 hidden space-y-4">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-bold">Saved Prompts Vault</h2>
+                <p class="text-xs text-slate-400">Stored local configuration variables</p>
+            </div>
+            <div id="saved-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                </div>
+        </section>
+
+        <section id="view-history" class="col-span-12 hidden space-y-4">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-bold">Transaction History Log</h2>
+                <button onclick="clearHistory()" class="text-xs text-rose-400 hover:underline cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i>Clear Logs</button>
+            </div>
+            <div class="bg-slate-900/40 border border-slate-800 rounded-xl overflow-hidden">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead class="bg-slate-950 text-slate-400 text-xs tracking-wider uppercase border-b border-slate-800">
+                        <tr>
+                            <th class="p-4">Timestamp</th>
+                            <th class="p-4">Input Fragment</th>
+                            <th class="p-4">Engine / Category</th>
+                            <th class="p-4 text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body" class="divide-y divide-slate-800/60 text-slate-300">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+    <script>
+        // Internal Runtime App State
+        let currentOutputState = { standard: "", advanced: "", analysis: {}, category: "", model: "" };
+        let historyLog = JSON.parse(localStorage.getItem('pf_history')) || [];
+        let savedVault = JSON.parse(localStorage.getItem('pf_vault')) || [];
+        let activeTab = "standard";
+
+        // DOM Inputs Tracking Setup
+        const rawInput = document.getElementById('raw-input');
+        const charCounter = document.getElementById('char-counter');
+        
+        rawInput.addEventListener('input', (e) => {
+            charCounter.textContent = `${e.target.value.length} chars`;
+        });
+
+        // App Navigation Engine Switches
+        function switchView(viewName) {
+            document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-cyan-500', 'text-white');
+                btn.classList.add('text-slate-400', 'hover:text-slate-200');
+            });
+            
+            const activeNav = document.getElementById(`nav-${viewName}`);
+            if(activeNav) {
+                activeNav.classList.remove('text-slate-400', 'hover:text-slate-200');
+                activeNav.classList.add('bg-cyan-500', 'text-white');
+            }
+
+            if(viewName === 'saved') renderSavedVault();
+            if(viewName === 'history') renderHistoryLog();
+        }
+
+        // Output Display Sub-Tabs state handling
+        function switchOutputTab(tabType) {
+            activeTab = tabType;
+            document.getElementById('tab-standard').className = tabType === 'standard' ? 'flex-1 text-xs py-1.5 px-3 rounded-lg font-medium text-white bg-slate-800 transition cursor-pointer' : 'flex-1 text-xs py-1.5 px-3 rounded-lg font-medium text-slate-400 transition cursor-pointer';
+            document.getElementById('tab-advanced').className = tabType === 'advanced' ? 'flex-1 text-xs py-1.5 px-3 rounded-lg font-medium text-white bg-slate-800 transition cursor-pointer' : 'flex-1 text-xs py-1.5 px-3 rounded-lg font-medium text-slate-400 transition cursor-pointer';
+            
+            updateOutputDisplay();
+        }
+
+        function updateOutputDisplay() {
+            const placeholder = document.getElementById('output-placeholder');
+            const container = document.getElementById('output-text-container');
+            const targetText = document.getElementById('output-rendered-text');
+
+            if (!currentOutputState[activeTab]) {
+                placeholder.classList.remove('hidden');
+                container.classList.add('hidden');
+                return;
+            }
+
+            placeholder.classList.add('hidden');
+            container.classList.remove('hidden');
+            targetText.textContent = currentOutputState[activeTab];
+        }
+
+        // Core Generation Logic Engine (Mock Generation Processing)
+        function processPrompt(actionType) {
+            const rawVal = rawInput.value.trim();
+            if(!rawVal) {
+                alert("Please drop your base prompt or idea in first!");
+                return;
+            }
+
+            const model = document.getElementById('target-model').value;
+            const category = document.getElementById('task-category').value;
+            const mode = document.getElementById('prompt-mode').value;
+            const injectNegative = document.getElementById('param-negative').checked;
+            const autoAspect = document.getElementById('param-aspect').checked;
+
+            let standardStr = "";
+            let advancedStr = "";
+            let modifications = "";
+            let negatives = "N/A";
+
+            if (category.includes('img') || category.includes('vid')) {
+                negatives = injectNegative ? "blurry, low quality, distorted anatomy, deformed hands, signature, watermark, low-res" : "None injected";
+                let aspectStr = autoAspect ? " --ar 16:9" : "";
+                
+                standardStr = `A highly detailed, professional cinematic rendering of: ${rawVal}, shot on 35mm lens, masterwork composition, hyper-realistic textures, volumetric global lighting${aspectStr}`;
+                advancedStr = `[Master Forge Edition] Dynamic dramatic composition featuring ${rawVal}. Unreal Engine 5 render, raytraced shadows, subtle subsurface scattering, color graded in warm cinematic tones, 8k resolution, crisp intricate micro-details${aspectStr} --v 6.0 --style raw`;
+                modifications = "Injected environmental rendering conditions, texture resolution tags, camera metadata modifiers, and style seeds.";
+            } else {
+                standardStr = `Act as an expert system specialist in ${category}. Perform the following task step-by-step with structural efficiency: ${rawVal}. Provide clean explanations where necessary.`;
+                advancedStr = `System Prompt Directives:\n- Context: High-tier tech execution suite.\n- Objective: Deliver unparalleled production-grade solutions for: "${rawVal}"\n- Requirements: Enforce strict structural logic, edge-case safety parameters, and optimize for the architectural parameters of ${model}.`;
+                modifications = "Injected structural persona mapping, strict constraint layouts, architectural specificity filters, and system level execution keys.";
+            }
+
+            currentOutputState = {
+                standard: standardStr,
+                advanced: advancedStr,
+                category: category.toUpperCase(),
+                model: model.toUpperCase(),
+                analysis: { modifications, negatives }
+            };
+
+            document.getElementById('analysis-dashboard').classList.remove('hidden');
+            document.getElementById('analysis-modifications').textContent = modifications;
+            document.getElementById('analysis-negatives').textContent = negatives;
+
+            updateOutputDisplay();
+
+            const logEntry = {
+                timestamp: new Date().toLocaleTimeString(),
+                input: rawVal.length > 30 ? rawVal.substring(0, 30) + "..." : rawVal,
+                engine: `${model.toUpperCase()} (${category.toUpperCase()})`
+            };
+            historyLog.unshift(logEntry);
+            localStorage.setItem('pf_history', JSON.stringify(historyLog));
+        }
+
+        // Copy Feature
+        function copyOutput() {
+            const activeText = currentOutputState[activeTab];
+            if(!activeText) {
+                alert("Nothing forged to copy yet!");
+                return;
+            }
+            navigator.clipboard.writeText(activeText)
+                .then(() => alert("Copied forged prompt output directly to clipboard!"))
+                .catch(err => alert("Copy failed. Try manually selecting the text."));
+        }
+
+        // Separate function to copy individual vault string cleanly without nested template breakages
+        function copyVaultText(txt) {
+            navigator.clipboard.writeText(txt);
+            alert("Copied vault item to clipboard!");
+        }
+
+        // Vault Save Logic
+        function saveCurrentPrompt() {
+            if(!currentOutputState.standard) return;
+            
+            const savedItem = {
+                id: Date.now(),
+                model: currentOutputState.model,
+                category: currentOutputState.category,
+                prompt: currentOutputState[activeTab]
+            };
+
+            savedVault.unshift(savedItem);
+            localStorage.setItem('pf_vault', JSON.stringify(savedVault));
+            alert("Prompt saved successfully to local Vault storage array!");
+        }
+
+        // Render Saved Vault View Cards
+        function renderSavedVault() {
+            const container = document.getElementById('saved-container');
+            if(savedVault.length === 0) {
+                container.innerHTML = `<p class="col-span-full text-sm text-slate-500 italic">Vault is empty. Strike prompts inside the workspace and save them.</p>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            savedVault.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-900/50 border border-slate-800 p-4 rounded-xl flex flex-col justify-between space-y-3";
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[10px] bg-cyan-900/50 text-cyan-400 border border-cyan-800/60 px-2 py-0.5 rounded-md font-bold">${item.model}</span>
+                            <span class="text-[10px] bg-slate-950 text-slate-400 px-2 py-0.5 rounded-md">${item.category}</span>
+                        </div>
+                        <p class="text-xs text-slate-300 mono line-clamp-4 leading-relaxed viewport-text"></p>
+                    </div>
+                    <div class="flex justify-end space-x-2 pt-2 border-t border-slate-800/40">
+                        <button class="copy-btn text-xs text-cyan-400 hover:underline cursor-pointer"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                        <button class="del-btn text-xs text-rose-400 hover:underline cursor-pointer"><i class="fa-regular fa-trash-can mr-1"></i>Delete</button>
+                    </div>
+                `;
+                card.querySelector('.viewport-text').textContent = item.prompt;
+                card.querySelector('.copy-btn').onclick = () => copyVaultText(item.prompt);
+                card.querySelector('.del-btn').onclick = () => deleteSaved(item.id);
+                
+                container.appendChild(card);
+            });
+        }
+
+        function deleteSaved(id) {
+            savedVault = savedVault.filter(item => item.id !== id);
+            localStorage.setItem('pf_vault', JSON.stringify(savedVault));
+            renderSavedVault();
+        }
+
+        // Render Logs History View
+        function renderHistoryLog() {
+            const tbody = document.getElementById('history-table-body');
+            if(historyLog.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-xs text-slate-500 italic">No historical log transitions tracked yet.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = historyLog.map((log, index) => `
+                <tr class="hover:bg-slate-900/30 transition">
+                    <td class="p-4 text-xs font-medium text-slate-400">${log.timestamp}</td>
+                    <td class="p-4 text-xs italic text-slate-200">"${log.input}"</td>
+                    <td class="p-4 text-xs"><span class="text-slate-400">${log.engine}</span></td>
+                    <td class="p-4 text-right"><button onclick="deleteHistoryIndex(${index})" class="text-rose-400 hover:text-rose-300 cursor-pointer text-xs"><i class="fa-solid fa-square-minus"></i></button></td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteHistoryIndex(index) {
+            historyLog.splice(index, 1);
+            localStorage.setItem('pf_history', JSON.stringify(historyLog));
+            renderHistoryLog();
+        }
+
+        function clearHistory() {
+            if(confirm("Are you absolutely sure you want to scrub the local runtime history logs?")) {
+                historyLog = [];
+                localStorage.removeItem('pf_history');
+                renderHistoryLog();
+            }
+        }
+
+        // Dark / Light framework switcher adjusted for Tailwind v4 behavior
+        function toggleTheme() {
+            const html = document.documentElement;
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if(html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                body.className = "bg-slate-50 text-slate-900 min-h-screen flex flex-col transition-colors duration-300";
+                themeIcon.className = "fa-solid fa-sun text-amber-500";
+            } else {
+                html.classList.add('dark');
+                body.className = "bg-slate-950 text-slate-100 min-h-screen flex flex-col transition-colors duration-300";
+                themeIcon.className = "fa-solid fa-moon text-slate-400";
+            }
+        }
+    </script>
+</body>
+</html>
